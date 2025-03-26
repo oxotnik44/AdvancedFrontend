@@ -7,6 +7,7 @@ export function buildPlugins({
   paths,
   isDev,
 }: BuildOptions): webpack.WebpackPluginInstance[] {
+  const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
   return [
     new HtmlWebpackPlugin({
       template: paths.html,
@@ -16,5 +17,10 @@ export function buildPlugins({
       filename: isDev ? "[name].css" : "css/[name].[contenthash:8].css",
       chunkFilename: isDev ? "[name].css" : "css/[name].[contenthash:8].css",
     }),
+    new webpack.DefinePlugin({
+      __IS_DEV__: JSON.stringify(isDev),
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+    isDev && new ReactRefreshWebpackPlugin(),
   ];
 }
