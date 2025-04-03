@@ -11,28 +11,40 @@ describe('classNames', () => {
   test('with mods false', () => {
     const expected = 'someClass class1 class2 hovered';
     expect(
-      classNames('someClass', { hovered: true, scrolled: false }, [
-        'class1',
-        'class2',
-      ]),
+      classNames(
+        'someClass',
+        {
+          hovered: true,
+          scrolled: false,
+        },
+        ['class1', 'class2'],
+      ),
     ).toBe(expected);
   });
   test('with mods', () => {
     const expected = 'someClass class1 class2 hovered scrolled';
     expect(
-      classNames('someClass', { hovered: true, scrolled: true }, [
-        'class1',
-        'class2',
-      ]),
+      classNames(
+        'someClass',
+        {
+          hovered: true,
+          scrolled: true,
+        },
+        ['class1', 'class2'],
+      ),
     ).toBe(expected);
   });
   test('with mods undefined', () => {
     const expected = 'someClass class1 class2 hovered';
     expect(
-      classNames('someClass', { hovered: true, scrolled: undefined }, [
-        'class1',
-        'class2',
-      ]),
+      classNames(
+        'someClass',
+        {
+          hovered: true,
+          scrolled: undefined,
+        },
+        ['class1', 'class2'],
+      ),
     ).toBe(expected);
   });
 });
