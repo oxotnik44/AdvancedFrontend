@@ -35,6 +35,9 @@ module.exports = {
     'global-require': 'off',
     'no-undef': 'off',
     'no-unused-vars': 'off',
+    'linebreak-style': 0,
+    'react/self-closing-comp': 'off',
+    'arrow-body-style': 'off',
     'object-curly-newline': [
       'error',
       {
