@@ -2,9 +2,9 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    jest: true,
+    'jest/globals': true,
   },
-  extends: ['plugin:react/recommended', 'airbnb', 'plugin:jest/recommended'],
+  extends: ['plugin:react/recommended', 'airbnb', 'plugin:jest/recommended', 'plugin:storybook/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
@@ -22,6 +22,7 @@ module.exports = {
       2,
       { extensions: ['.js', '.jsx', '.tsx'] },
     ],
+
     'import/no-unresolved': 'off',
     'import/prefer-default-export': 'off',
     'react/require-default-props': 'off',
