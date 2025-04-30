@@ -4,30 +4,37 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+
 jobs:
   pipeline:
     runs-on: ubuntu-latest
+    # Отключаем «быстрый провал» — даже если одна параллельная задача упадёт,
+    # остальные всё равно запустятся до конца
     strategy:
+      fail-fast: false
       matrix:
         node-version: [22.x]
+        script:
+          - build:prod
+          - lint:ts
+          - lint:scss
+          - test:unit
+          - storybook:build
+          - test:ui:ci
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Staring Node.js ${{ matrix.node-version }}
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: install modules
+
+      - name: Install dependencies
         run: npm install
-      - name: build production project
-        run: npm run build:prod
-      - name: linting typescript
-        run: npm run lint:ts
-      - name: linting css
-        run: npm run lint:scss
-      - name: unit testing
-        run: npm run test:unit
-      - name: build storybook
-        run: npm run storybook:build
-      - name: screenshot testing
-        run: npm run test:ui:ci
+
+      # Здесь matrix.script будет по очереди принимать значения из списка выше,
+      # причём все «экземпляры» этого job запустятся параллельно
+      - name: Run ${{ matrix.script }}
+        run: npm run ${{ matrix.script }}
