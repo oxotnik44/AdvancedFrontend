@@ -6,10 +6,9 @@ on:
     branches: [main]
 
 jobs:
+  # 1) Общие проверки: build, lint, unit-тесты
   pipeline:
     runs-on: ubuntu-latest
-    # Отключаем «быстрый провал» — даже если одна параллельная задача упадёт,
-    # остальные всё равно запустятся до конца
     strategy:
       fail-fast: false
       matrix:
@@ -19,22 +18,68 @@ jobs:
           - lint:ts
           - lint:scss
           - test:unit
-          - storybook:build
-          - test:ui:ci
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'npm' # Кешируем npm-зависимости
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci # быстрее, чем npm install
 
-      # Здесь matrix.script будет по очереди принимать значения из списка выше,
-      # причём все «экземпляры» этого job запустятся параллельно
       - name: Run ${{ matrix.script }}
         run: npm run ${{ matrix.script }}
+
+  # 2) Сборка Storybook и публикация артефакта
+  storybook-build:
+    runs-on: ubuntu-latest
+    needs: pipeline
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Storybook
+        run: npm run storybook:build
+
+      - name: Upload Storybook build
+        uses: actions/upload-artifact@v3
+        with:
+          name: storybook-static
+          path: storybook-static/
+
+  # 3) UI‑тесты: скачиваем собранный Storybook
+  test-ui:
+    runs-on: ubuntu-latest
+    needs: storybook-build
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download Storybook build
+        uses: actions/download-artifact@v3
+        with:
+          name: storybook-static
+          path: ./storybook-static
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run UI tests in CI
+        run: npm run test:ui:ci -- --static-dir=storybook-static
