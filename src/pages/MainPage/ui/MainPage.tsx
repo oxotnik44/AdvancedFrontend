@@ -9,7 +9,7 @@ const MainPage = () => {
     <div>
       <BugButton />
       <Counter />
-      <Input placeholder="Введите текст" />
+      <Input placeholder={t('Введите текст')} />
       {t('Главная страница')}
     </div>
   );
