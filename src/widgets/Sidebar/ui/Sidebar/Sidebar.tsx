@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { classNames } from 'shared/lib/classNames/classNames';
-import { ThemeSwither } from 'widgets/ThemeSwither';
-import { LangSwitcher } from 'widgets/LangSwitcher/ui/LangSwitcher';
+import { ThemeSwither } from 'shared/ui/ThemeSwither';
+import { LangSwitcher } from 'shared/ui/LangSwitcher/ui/LangSwitcher';
 import { Button, ButtonSize, ButtonTheme } from 'shared/ui/Button/Button';
 import { AppLink, AppLinkTheme } from 'shared/ui/AppLink/AppLink';
 import { RoutePath } from 'shared/config/routeConfig/routeConfig';
@@ -23,24 +23,14 @@ export const Sidebar = ({ className }: SidebarProps) => {
   return (
     <div
       data-testid="sidebar"
-      className={classNames(cls.Sidebar, { [cls.collapsed]: collapsed }, [
-        className,
-      ])}
+      className={classNames(cls.Sidebar, { [cls.collapsed]: collapsed }, [className])}
     >
       <div className={cls.items}>
-        <AppLink
-          theme={AppLinkTheme.SECONDARY}
-          className={cls.item}
-          to={RoutePath.main}
-        >
+        <AppLink theme={AppLinkTheme.SECONDARY} className={cls.item} to={RoutePath.main}>
           <AboutIcon className={cls.icon} />
           <span className={cls.link}>{t('Главная')}</span>
         </AppLink>
-        <AppLink
-          theme={AppLinkTheme.SECONDARY}
-          className={cls.item}
-          to={RoutePath.about}
-        >
+        <AppLink theme={AppLinkTheme.SECONDARY} className={cls.item} to={RoutePath.about}>
           <MainIcon className={cls.icon} />
           <span className={cls.link}>{t('О сайте')}</span>
         </AppLink>

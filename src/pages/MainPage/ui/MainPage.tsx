@@ -1,6 +1,7 @@
 import { BugButton } from 'app/providers/ErrorBoundary';
 import { Counter } from 'entities/Counter';
 import { useTranslation } from 'react-i18next';
+import { Input } from 'shared/ui/Input/Input';
 
 const MainPage = () => {
   const { t } = useTranslation('main');
@@ -8,6 +9,7 @@ const MainPage = () => {
     <div>
       <BugButton />
       <Counter />
+      <Input placeholder="Введите текст" />
       {t('Главная страница')}
     </div>
   );

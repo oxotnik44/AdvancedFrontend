@@ -11,6 +11,7 @@ interface ThemeSwitherProps {
 
 export const ThemeSwither = ({ className }: ThemeSwitherProps) => {
   const { theme, toggleTheme } = useTheme();
+  console.log(theme);
   return (
     <Button
       onClick={toggleTheme}
