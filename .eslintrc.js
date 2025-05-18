@@ -56,6 +56,8 @@ module.exports = {
     'jsx-a11y/click-events-have-key-events': 'off',
     'implicit-arrow-linebreak': 'off',
     'no-param-reassign': 'off',
+    'import/order': 'off',
+    'no-trailing-spaces': 'off',
     'react/jsx-wrap-multilines': 'off',
     // Правила хуков React
     'react-hooks/rules-of-hooks': 'error',

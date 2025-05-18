@@ -1,7 +1,8 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import React from 'react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Modal } from 'shared/ui/Modal/Modal';
 import { Theme } from 'app/providers/ThemeProvider';
 import { ThemeDecorator } from 'shared/config/storybook/ThemeDecorator';
-import { Modal } from './Modal';
 
 export default {
   title: 'shared/Modal',
@@ -19,6 +20,7 @@ Primary.args = {
   children:
     'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid commodi consequatur eligendi impedit incidunt necessitatibus possimus quis saepe sunt totam.\n ',
 };
+
 export const Dark = Template.bind({});
 Dark.args = {
   isOpen: true,
