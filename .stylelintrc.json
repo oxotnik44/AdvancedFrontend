@@ -1,22 +1,7 @@
 {
   "extends": "stylelint-config-standard-scss",
   "rules": {
-    "indentation": 2,
-    "selector-class-pattern": null,
-    "color-hex-case": "lower",
-    "color-hex-length": "short",
-    "number-leading-zero": "always",
-    "number-max-precision": 5,
-    "string-quotes": "single",
-    "declaration-block-no-duplicate-properties": true,
-    "block-no-empty": true,
-    "max-empty-lines": 2,
-    "selector-max-id": 0,
-    "property-no-unknown": true,
-    "value-no-vendor-prefix": true,
-    "selector-no-vendor-prefix": true,
-    "at-rule-no-vendor-prefix": true,
-    "value-keyword-case": "lower",
-    "no-descending-specificity": null
+    "indentation": [4],
+    "selector-class-pattern": null
   }
 }

@@ -1,66 +1,38 @@
 import webpack, { DefinePlugin, RuleSetRule } from 'webpack';
 import path from 'path';
-import { BuildPaths } from '../build/types/config';
 import { buildCssLoader } from '../build/loaders/buildCssLoader';
+import { BuildPaths } from '../build/types/config';
 
-export default ({ config: originalConfig }: { config: webpack.Configuration }) => {
-  // Клонируем исходный конфиг, чтобы не мутировать оригинал
-  const config: webpack.Configuration = {
-    ...originalConfig,
-    resolve: {
-      modules: [
-        'node_modules',
-        path.resolve(__dirname, '..', '..', 'src'),
-        ...(originalConfig.resolve?.modules || []),
-      ],
-      extensions: ['.js', '.json', '.ts', '.tsx', ...(originalConfig.resolve?.extensions || [])],
-      ...originalConfig.resolve,
-    },
-    module: {
-      rules: [],
-      ...originalConfig.module,
-    },
-    // Если в originalConfig уже есть плагины — сохраняем их, иначе создаём новый массив
-    plugins: [...(originalConfig.plugins || [])],
-  };
+export default ({ config }: {config: webpack.Configuration}) => {
+    const paths: BuildPaths = {
+        build: '',
+        html: '',
+        entry: '',
+        src: path.resolve(__dirname, '..', '..', 'src'),
+    };
+    config!.resolve!.modules!.push(paths.src);
+    config!.resolve!.extensions!.push('.ts', '.tsx');
 
-  // Извлекаем из конфига существующие правила (фильтруем только объекты‑RuleSetRule)
-  const baseRules = (config.module!.rules as unknown as Array<RuleSetRule | any>).filter(
-    (r): r is RuleSetRule => typeof r === 'object' && r !== null,
-  );
+    // eslint-disable-next-line no-param-reassign
+    // @ts-ignore
+    config!.module!.rules = config.module!.rules!.map((rule: RuleSetRule) => {
+        if (/svg/.test(rule.test as string)) {
+            return { ...rule, exclude: /\.svg$/i };
+        }
 
-  // Обновляем правило для SVG: исключаем из старого лоадера файлы *.svg
-  const updatedRules: RuleSetRule[] = baseRules.map((rule) => {
-    if (rule.test instanceof RegExp && rule.test.test('.svg')) {
-      return {
-        ...rule,
-        exclude: /\.svg$/i,
-      };
-    }
-    return rule;
-  });
+        return rule;
+    });
 
-  // Добавляем CSS/SCSS-лоадер (buildCssLoader(true) возвращает RuleSetRule)
-  updatedRules.push(buildCssLoader(true));
+    config!.module!.rules.push({
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
+    });
+    config!.module!.rules.push(buildCssLoader(true));
 
-  // Добавляем правило для обработки SVG через @svgr/webpack
-  updatedRules.push({
-    test: /\.svg$/i,
-    use: ['@svgr/webpack'],
-  });
+    config!.plugins!.push(new DefinePlugin({
+        __IS_DEV__: JSON.stringify(true),
+        __API__: JSON.stringify(''),
+    }));
 
-  // Заменяем module.rules на обновлённый массив
-  config.module = {
-    ...config.module,
-    rules: updatedRules,
-  };
-
-  // Добавляем DefinePlugin в секцию plugins
-  config.plugins!.push(
-    new DefinePlugin({
-      __IS_DEV__: true,
-    }),
-  );
-
-  return config;
+    return config;
 };
