@@ -2,12 +2,14 @@ module.exports = {
     env: {
         browser: true,
         es2021: true,
-        jest: true,
+        'jest/globals': true,
     },
     extends: [
         'plugin:react/recommended',
         'airbnb',
-        'plugin:i18next/recommended',
+        'plugin:jest/recommended',
+        'plugin:storybook/recommended',
+        'plugin:react-hooks/recommended',
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -17,23 +19,15 @@ module.exports = {
         ecmaVersion: 'latest',
         sourceType: 'module',
     },
-    plugins: [
-        'react',
-        '@typescript-eslint',
-        'i18next',
-        'react-hooks',
-    ],
+    plugins: ['react', '@typescript-eslint', 'i18next', 'jest', 'react-hooks'],
     rules: {
-        'react/jsx-indent': [2, 4],
-        'react/jsx-indent-props': [2, 4],
-        indent: [2, 4],
-        'react/jsx-filename-extension': [
-            2,
-            { extensions: ['.js', '.jsx', '.tsx'] },
-        ],
+        'react/jsx-indent': [2, 2],
+        'react/jsx-indent-props': [2, 2],
+        indent: [2, 2],
+        'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.tsx'] }],
+
         'import/no-unresolved': 'off',
         'import/prefer-default-export': 'off',
-        'no-unused-vars': 'off',
         'react/require-default-props': 'off',
         'react/react-in-jsx-scope': 'off',
         'react/jsx-props-no-spreading': 'warn',
@@ -42,32 +36,41 @@ module.exports = {
         'import/extensions': 'off',
         'import/no-extraneous-dependencies': 'off',
         'no-underscore-dangle': 'off',
-        'i18next/no-literal-string': [
+        'global-require': 'off',
+        'no-undef': 'off',
+        'no-unused-vars': 'off',
+        'linebreak-style': 0,
+        'react/self-closing-comp': 'off',
+        'arrow-body-style': 'off',
+        'object-curly-newline': [
             'error',
             {
-                markupOnly: true,
-                ignoreAttribute: ['data-testid', 'to'],
+                ObjectExpression: { multiline: true, consistent: true },
+                ObjectPattern: { multiline: true, consistent: true },
+                ImportDeclaration: { multiline: true, consistent: true },
+                ExportDeclaration: { multiline: true, consistent: true },
             },
         ],
-        'max-len': ['error', { ignoreComments: true, code: 120 }],
+        'i18next/no-literal-string': ['warn', { markupOnly: true }],
         'jsx-a11y/no-static-element-interactions': 'off',
         'jsx-a11y/click-events-have-key-events': 'off',
-        'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
-        'react-hooks/exhaustive-deps': 'error', // Checks effect dependencies,
+        'implicit-arrow-linebreak': 'off',
         'no-param-reassign': 'off',
-        'no-undef': 'off',
+        'import/order': 'off',
+        'no-trailing-spaces': 'off',
+        'react/jsx-wrap-multilines': 'off',
+        // Правила хуков React
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'error',
+        // Пустые строки между функциями
+        'padding-line-between-statements': [
+            'error',
+            { blankLine: 'always', prev: '*', next: 'function' },
+            { blankLine: 'always', prev: 'function', next: 'function' },
+            { blankLine: 'always', prev: 'function', next: '*' },
+        ],
     },
     globals: {
         __IS_DEV__: true,
-        __API__: true,
     },
-    overrides: [
-        {
-            files: ['**/src/**/*.{test,stories}.{ts,tsx}'],
-            rules: {
-                'i18next/no-literal-string': 'off',
-                'max-len': 'off',
-            },
-        },
-    ],
 };
