@@ -6,7 +6,7 @@ import { ProfilePage } from 'pages/ProfilePage';
 
 export type AppRoutesProps = RouteProps & {
     authOnly?: boolean;
-};
+}
 
 export enum AppRoutes {
     MAIN = 'main',
